@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "bapphammer",
+    "productName": "Modsmith",
     "version": "0.0.0"
   },
   "tauri": {
@@ -72,9 +72,9 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "bapphammer",
+        "title": "Modsmith",
         "width": 1200,
-        "minHeight": 400,
+        "minHeight": 600,
         "minWidth": 760
       }
     ]

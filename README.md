@@ -1,4 +1,4 @@
-# BappHammer
+# Modsmith
 
 A Warhammer III mod manager.
 
