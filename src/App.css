@@ -1,0 +1,28 @@
+.logo.vite:hover {
+  filter: drop-shadow(0 0 2em #747bff);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafb);
+}
+
+.main-container {
+  display: flex;
+}
+
+.launch-game-container {
+  margin: 10px;
+}
+
+.sidepanel {
+  width: 200px;
+  display: flex;
+  position: sticky;
+  top: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  background: rgba(0,0,0,0.2);
+}
+
