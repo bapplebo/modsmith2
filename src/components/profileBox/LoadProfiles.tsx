@@ -29,7 +29,7 @@ export const LoadProfiles = () => {
 
   return (
     <>
-      <Dialog className="p-3 w-96 shadow-lg bg-neutral-800" isOpen={showModal} onDismiss={close}>
+      <Dialog className="rounded-md p-3 w-96 shadow-lg bg-neutral-800" isOpen={showModal} onDismiss={close}>
         <div className="p-1 text-base">Load profile</div>
         <div className="mb-2 border-b border-neutral-600" />
         <div className="bg-neutral-900 rounded mb-2 overflow-y-auto h-96">
@@ -48,12 +48,10 @@ export const LoadProfiles = () => {
           })}
         </div>
         <div className="flex justify-between">
-          <button className="w-1/3" onClick={loadProfile}>
-            Load
-          </button>
-          <button className="w-1/3" onClick={close}>
+          <Button onClick={loadProfile}>Load</Button>
+          <Button variant="secondary" onClick={close}>
             Close
-          </button>
+          </Button>
         </div>
       </Dialog>
       <Button className="w-full" onClick={open}>

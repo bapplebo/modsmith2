@@ -6,6 +6,7 @@ import './style.css';
 //import { initialize } from './utils/cache';
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { bootstrap } from './utils/bootstrap';
+import 'flowbite';
 
 const queryClient = new QueryClient();
 bootstrap();

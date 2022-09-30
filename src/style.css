@@ -53,14 +53,6 @@ button:hover {
   border-color: #396cd8;
 }
 
-input,
-button {
-  outline: none;
-}
-
-#greet-input {
-  margin-right: 5px;
-}
 
 @media (prefers-color-scheme: dark) {
   :root {

@@ -83,12 +83,10 @@ export const SaveProfile = () => {
           value={profileName}
         />
         <div className="flex justify-between">
-          <button className="w-1/3" onClick={saveProfile}>
-            Save
-          </button>
-          <button className="w-1/3" onClick={close}>
+          <Button onClick={saveProfile}>Save</Button>
+          <Button variant="secondary" onClick={close}>
             Close
-          </button>
+          </Button>
         </div>
       </Dialog>
       <Button className="w-full" variant="secondary" onClick={open}>

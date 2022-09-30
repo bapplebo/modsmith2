@@ -45,15 +45,13 @@ const defaultColumns: ColumnDef<Mod, any>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="pt-1">
-        <IndeterminateCheckbox
-          {...{
-            checked: row.getIsSelected(),
-            indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler(),
-          }}
-        />
-      </div>
+      <IndeterminateCheckbox
+        {...{
+          checked: row.getIsSelected(),
+          indeterminate: row.getIsSomeSelected(),
+          onChange: row.getToggleSelectedHandler(),
+        }}
+      />
     ),
   }),
   columnHelper.accessor('title', {
