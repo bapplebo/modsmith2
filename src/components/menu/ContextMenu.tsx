@@ -5,6 +5,7 @@ import { open } from '@tauri-apps/api/shell';
 import Dialog from '@reach/dialog';
 import { saveCategory } from '../../utils/categoryUtils';
 import { useQueryClient } from '@tanstack/react-query';
+import { Button } from '../generic/Button';
 
 const itemClasses = 'p-1 px-2 cursor-pointer hover:bg-neutral-700';
 
@@ -63,12 +64,10 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
           value={categoryName}
         />
         <div className="flex justify-between">
-          <button className="w-1/3" onClick={saveNewCategory}>
-            Save
-          </button>
-          <button className="w-1/3" onClick={close}>
+          <Button onClick={saveNewCategory}>Save</Button>
+          <Button variant="secondary" onClick={close}>
             Close
-          </button>
+          </Button>
         </div>
       </Dialog>
     </>

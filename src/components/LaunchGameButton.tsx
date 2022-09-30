@@ -6,6 +6,7 @@ import { Mod } from '../models/Mod';
 import { selectedModsState } from '../state/selectedMods';
 import { setUpSymlinks, writeUserScript, clearSymlinks, clearUserScript } from '../utils/launchGameUtils';
 import { getInstallDirectory } from '../utils/pathUtils';
+import { Button } from './generic/Button';
 
 export const LaunchGameButton = () => {
   const [gameLaunched, setGameLaunched] = useState(false);
@@ -43,8 +44,8 @@ export const LaunchGameButton = () => {
   };
 
   return (
-    <button className="w-full" onClick={launchGame}>
+    <Button className="w-full" onClick={launchGame}>
       {gameLaunched ? '...' : 'Launch game'}
-    </button>
+    </Button>
   );
 };

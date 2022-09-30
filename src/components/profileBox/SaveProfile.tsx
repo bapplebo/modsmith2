@@ -8,6 +8,7 @@ import { writeFile } from '@tauri-apps/api/fs';
 import { getProfilesDir } from '../../utils/pathUtils';
 import { join } from '@tauri-apps/api/path';
 import { useQueryClient } from '@tanstack/react-query';
+import { Button } from '../generic/Button';
 
 export const SaveProfile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -90,9 +91,9 @@ export const SaveProfile = () => {
           </button>
         </div>
       </Dialog>
-      <button className="w-full" onClick={open}>
+      <Button className="w-full" variant="secondary" onClick={open}>
         Save profile
-      </button>
+      </Button>
     </>
   );
 };

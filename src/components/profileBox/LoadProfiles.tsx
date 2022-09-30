@@ -5,6 +5,7 @@ import Dialog from '@reach/dialog';
 import { readTextFile } from '@tauri-apps/api/fs';
 
 import '@reach/dialog/styles.css';
+import { Button } from '../generic/Button';
 export const LoadProfiles = () => {
   const [showModal, setShowModal] = useState(false);
   const [profiles, setProfiles] = useRecoilState(profilesState);
@@ -55,9 +56,9 @@ export const LoadProfiles = () => {
           </button>
         </div>
       </Dialog>
-      <button className="w-full" onClick={open}>
+      <Button className="w-full" onClick={open}>
         Load profile
-      </button>
+      </Button>
     </>
   );
 };

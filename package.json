@@ -15,6 +15,7 @@
     "@tanstack/react-table": "^8.5.13",
     "@tauri-apps/api": "^1.1.0",
     "axios": "^0.27.2",
+    "classnames": "^2.3.2",
     "fast-xml-parser": "^4.0.10",
     "got": "^12.5.1",
     "react": "^18.2.0",

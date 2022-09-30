@@ -24,8 +24,6 @@ function App() {
     return cats;
   });
 
-  console.log(categories);
-
   const modListQuery = useQuery(
     ['modlist', JSON.stringify(categories)],
     async () => {
