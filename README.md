@@ -2,6 +2,12 @@
 
 A Warhammer III mod manager.
 
+## Requirements
+
+* Node 14+
+* Rust
+* Windows 10+
+
 ## Getting started
 
 1. Ensure that a recent version of `steam_api64.dll` is inside `src-tauri/lib`.
