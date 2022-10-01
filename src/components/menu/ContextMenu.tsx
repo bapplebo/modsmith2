@@ -7,7 +7,7 @@ import { saveCategory } from '../../utils/categoryUtils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../generic/Button';
 
-const itemClasses = 'p-1 px-2 cursor-pointer hover:bg-neutral-700';
+const itemClasses = 'rounded p-1 px-2 cursor-pointer hover:bg-neutral-700';
 
 const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLElement | null> }) => {
   const { xPos, yPos, menu, url, modId } = useContextMenu(outerRef);
@@ -33,7 +33,7 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
   if (menu) {
     return (
       <ul
-        className="absolute bg-neutral-800 border border-neutral-900 text-sm shadow-lg"
+        className="p-1 rounded absolute bg-neutral-800 border border-neutral-900 text-sm shadow-lg space-y-1"
         style={{ top: yPos, left: xPos }}
       >
         {url ? (
