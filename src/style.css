@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@font-face { font-family: inter-regular; 
+  src: url('./assets/Inter-Regular.otf') format('opentype'); } 
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "inter-regular", Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
