@@ -19,6 +19,8 @@ export const LaunchGameButton = () => {
     await clearUserScript();
 
     if (selectedMods.length > 0) {
+      // todo - handle Last mods used 
+      
       await setUpSymlinks(selectedMods);
       console.log('Symlinks created');
       await writeUserScript(selectedMods);

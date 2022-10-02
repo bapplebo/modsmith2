@@ -74,8 +74,11 @@ function App() {
   }
 
   return (
-    <div className="w-full flex">
-      <div className="sidepanel">
+    <div className="w-full flex full-bg">
+      <div
+        className="sidepanel acrylic
+       bg-opacity-20 bg-black"
+      >
         <div className="mt-2">MODSMITH</div>
         <div className="launch-game-container space-y-3">
           <ProfileBox />

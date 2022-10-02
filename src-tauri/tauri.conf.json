@@ -75,7 +75,8 @@
         "title": "Modsmith",
         "width": 1200,
         "minHeight": 600,
-        "minWidth": 760
+        "minWidth": 760,
+        "decorations": true
       }
     ]
   }

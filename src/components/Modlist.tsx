@@ -145,7 +145,7 @@ export const Modlist = () => {
         mods.map((mod) => {
           return (
             <tr
-              className="hover:bg-neutral-800"
+              className="hover:bg-neutral-200 hover:bg-opacity-20"
               data-url={mod.original.url}
               data-modid={mod.original.modId}
               key={mod.id}
@@ -221,7 +221,7 @@ export const Modlist = () => {
             </tbody>
           </table>
         </div>
-        <div className="h-12 p-2 bg-neutral-900 w-full">
+        <div className="acrylic h-12 p-2 border-t border-t-gray-700 bg-neutral-700 shadow-sm bg-opacity-20 w-full">
           <input
             className="p-1 px-2 text-sm border rounded border-gray-600 border-b"
             placeholder="Filter mods by name..."
