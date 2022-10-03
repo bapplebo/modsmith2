@@ -68,7 +68,7 @@ export const ModOrder = () => {
           'D:\\games\\Steam\\steamapps\\workshop\\content\\1142710\\2789844937\\wolfy_great_bastion_takes_no_attrition.png'
         )}
       /> */}
-        <div className="w-full p-2 mb-2 text-base bg-slate-700 flex justify-between">
+        <div className="w-full  p-2 mb-2 text-base bg-slate-700 flex justify-between">
           <div>
             OPTIONAL: Configure your load order here by dragging and dropping via the icon on the left.
             <br />

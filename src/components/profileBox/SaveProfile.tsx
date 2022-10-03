@@ -61,7 +61,7 @@ export const SaveProfile = () => {
           Enter a profile name to save. Using the same name will overwrite an existing profile.
         </div>
         <div className="mb-2 border-b border-neutral-600" />
-        <div className="bg-neutral-900 rounded mb-2 overflow-y-auto h-96">
+        <div className="bg-neutral-900 rounded mb-2 overflow-y-auto h-48">
           {profiles.map((profile, i) => {
             return (
               <div

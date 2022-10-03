@@ -10,7 +10,8 @@ enum ModContentPanel {
 export const ModContent = () => {
   const [selectedPanel, setSelectedPanel] = useState<ModContentPanel>(ModContentPanel.MODLIST);
   return (
-    <div className="h-[calc(100%_-_3.5rem)]">
+    <div className="h-full flex flex-col">
+      {/* <div className="h-[calc(100%_-_5.5rem)]"> */}
       <div className="px-2 text-base z-10 flex items-center h-14 text-md space-x-2 select-none bg-neutral-900 bg-opacity-20 shadow-sm w-full">
         <div
           className="cursor-pointer hover:bg-neutral-800 py-1 px-2 rounded transition ease-in-out border-neutral-800 border"
@@ -25,7 +26,7 @@ export const ModContent = () => {
           Configure load order
         </div>
       </div>
-      <div className="h-full">{selectedPanel === ModContentPanel.MODLIST ? <Modlist /> : <ModOrder />}</div>
+      <div className="h-full grow">{selectedPanel === ModContentPanel.MODLIST ? <Modlist /> : <ModOrder />}</div>
     </div>
   );
 };

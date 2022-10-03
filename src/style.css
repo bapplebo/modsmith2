@@ -97,14 +97,16 @@ button:hover {
 
 .titlebar {
   height: 30px;
-  background: #329ea3;
+  background: transparent;
   user-select: none;
   display: flex;
   justify-content: flex-end;
-  position: fixed;
+  
+  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;
+  z-index: 30;
 }
 
 .titlebar-button {
@@ -114,8 +116,9 @@ button:hover {
   width: 30px;
   height: 30px;
 }
+
 .titlebar-button:hover {
-  background: #5bbec3;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .acrylic::after {

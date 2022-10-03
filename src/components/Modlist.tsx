@@ -175,14 +175,14 @@ export const Modlist = () => {
   return (
     <>
       <TableContextMenu outerRef={outerRef} />
-      <div className="h-full flex flex-col">
-        <div className="overflow-y-scroll">
+      <div className="h-full  w-full flex flex-col">
+        <div className="h-full w-full overflow-y-scroll">
           {/* <img
         src={convertFileSrc(
           'D:\\games\\Steam\\steamapps\\workshop\\content\\1142710\\2789844937\\wolfy_great_bastion_takes_no_attrition.png'
         )}
       /> */}
-          <table className="w-full">
+          <table className="h-2 table-fixed block w-full mb-7">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -221,7 +221,7 @@ export const Modlist = () => {
             </tbody>
           </table>
         </div>
-        <div className="acrylic h-12 p-2 border-t border-t-gray-700 bg-neutral-700 shadow-sm bg-opacity-20 w-full">
+        <div className="sticky bottom-0 acrylic h-12 p-2 border-t border-t-gray-700 bg-neutral-700 shadow-sm bg-opacity-20 w-full">
           <input
             className="p-1 px-2 text-sm border rounded border-gray-600 border-b"
             placeholder="Filter mods by name..."
