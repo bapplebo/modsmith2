@@ -28,9 +28,7 @@ function App() {
     ['modlist', JSON.stringify(categories)],
     async () => {
       // todo - transform into our Mod.ts data structure from rust
-      console.log('retrieving again');
       let modList = await retrieveModList();
-      console.log(modList);
       if (!modList) {
         throw new Error('Failed to load modlist');
       }
@@ -72,6 +70,9 @@ function App() {
   if (profiles.data) {
     setProfiles(profiles.data);
   }
+
+  // todo - first time setup
+  // Creating configuration files - ensure that Steam has started and Warhammer III is installed.
 
   return (
     <div className="w-full flex full-bg">

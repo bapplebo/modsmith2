@@ -17,6 +17,7 @@ use steamworks::AppId;
 use steamworks::Client;
 use steamworks::ClientManager;
 use steamworks::PublishedFileId;
+use tauri::Manager;
 
 #[derive(serde::Serialize, Clone, Debug)]
 struct ModMetadata {
@@ -236,7 +237,6 @@ fn find_mods(client: tauri::State<steamworks::Client<ClientManager>>) -> Vec<Str
 fn main() {
     // 1142710 - WH3 ID
     let (client, single) = Client::init_app(1142710).unwrap();
-
     let callback_thread = std::thread::spawn(move || loop {
         single.run_callbacks();
         std::thread::sleep(std::time::Duration::from_millis(50));
@@ -255,6 +255,11 @@ fn main() {
             setup_symlinks,
             delete_symlinks
         ])
+        .setup(|app| {
+            let main_window = app.get_window("main").unwrap();
+            main_window.get_window("main").unwrap().show().unwrap();
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 
