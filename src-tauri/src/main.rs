@@ -17,6 +17,7 @@ use steamworks::AppId;
 use steamworks::Client;
 use steamworks::ClientManager;
 use steamworks::PublishedFileId;
+use tauri::api::dialog::*;
 use tauri::Manager;
 
 #[derive(serde::Serialize, Clone, Debug)]
@@ -236,34 +237,63 @@ fn find_mods(client: tauri::State<steamworks::Client<ClientManager>>) -> Vec<Str
 
 fn main() {
     // 1142710 - WH3 ID
-    let (client, single) = Client::init_app(1142710).unwrap();
-    let callback_thread = std::thread::spawn(move || loop {
-        single.run_callbacks();
-        std::thread::sleep(std::time::Duration::from_millis(50));
-    });
 
-    tauri::Builder::default()
-        .manage(client)
-        .invoke_handler(tauri::generate_handler![
-            greet,
-            get_install_dir,
-            launch_game,
-            find_mods,
-            get_metadata_from_workshop_ids,
-            get_subscribed_items,
-            get_public_steam_user_data,
-            setup_symlinks,
-            delete_symlinks
-        ])
-        .setup(|app| {
-            let main_window = app.get_window("main").unwrap();
-            main_window.get_window("main").unwrap().show().unwrap();
-            Ok(())
-        })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+    // let (client, single) = Client::init_app(1142710).unwrap();
 
-    callback_thread
-        .join()
-        .expect("Failed to join callback thread");
+    match Client::init_app(1142710) {
+        Ok((client, single)) => {
+            let callback_thread = std::thread::spawn(move || loop {
+                single.run_callbacks();
+                std::thread::sleep(std::time::Duration::from_millis(50));
+            });
+
+            tauri::Builder::default()
+                .manage(client)
+                .invoke_handler(tauri::generate_handler![
+                    greet,
+                    get_install_dir,
+                    launch_game,
+                    find_mods,
+                    get_metadata_from_workshop_ids,
+                    get_subscribed_items,
+                    get_public_steam_user_data,
+                    setup_symlinks,
+                    delete_symlinks
+                ])
+                .setup(|app| {
+                    let main_window = app.get_window("main").unwrap();
+                    main_window.get_window("main").unwrap().show().unwrap();
+                    Ok(())
+                })
+                .run(tauri::generate_context!())
+                .expect("error while running tauri application");
+
+            callback_thread
+                .join()
+                .expect("Failed to join callback thread");
+        }
+        Err(e) => {
+            tauri::Builder::default()
+                .setup(move |app| {
+                    println!("{}", e.to_string());
+                    let main_window = app.get_window("main").unwrap();
+                    main_window.get_window("main").unwrap().show().unwrap();
+
+                    MessageDialogBuilder::new(
+                        "Error",
+                        "Please make sure Steam is running before launching.",
+                    )
+                    .kind(MessageDialogKind::Error)
+                    .buttons(MessageDialogButtons::Ok)
+                    .show(move |f| {
+                        main_window.close();
+                        println!("close")
+                    });
+
+                    Ok(())
+                })
+                .run(tauri::generate_context!())
+                .expect("error while running tauri application");
+        }
+    }
 }

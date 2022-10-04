@@ -2,9 +2,16 @@ import { WARHAMMER_3_ID } from './constants';
 import { invoke } from '@tauri-apps/api';
 import { configDir, join } from '@tauri-apps/api/path';
 
-export const getInstallDirectory = async () => invoke('get_install_dir');
+export const getInstallDirectory = async () => {
+  try {
+    const dir = await invoke('get_install_dir');
+    return dir;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
-export const steamContentDirectory = async () => {
+export const getSteamContentDirectory = async () => {
   const installDirectory = (await getInstallDirectory()) as unknown as string;
   const steamContentDirectory = await join(
     `${installDirectory.split('common')[0]}`,

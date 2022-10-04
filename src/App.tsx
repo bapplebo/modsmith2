@@ -1,7 +1,13 @@
 import { useEffect } from 'react';
 import './App.css';
-import { readTextFile } from '@tauri-apps/api/fs';
-import { getInstallDirectory } from './utils/pathUtils';
+import { exists, readTextFile } from '@tauri-apps/api/fs';
+import {
+  getConfigFilePath,
+  getInstallDirectory,
+  getModsmithConfigDir,
+  getProfilesDir,
+  getSteamContentDirectory,
+} from './utils/pathUtils';
 import { useRecoilState } from 'recoil';
 import { LaunchGameButton } from './components/LaunchGameButton';
 import { ModContent } from './components/ModContent';
@@ -15,11 +21,33 @@ import { categoryState } from './state/categoryState';
 import { retrieveCategories } from './utils/categoryUtils';
 import { appWindow } from '@tauri-apps/api/window';
 import { Titlebar } from './components/titlebar/Titlebar';
+import { dir } from 'console';
 
 function App() {
   const [_, setProfiles] = useRecoilState(profilesState);
   const [loadedMods, setLoadedMods] = useRecoilState(loadedModsState);
   const [categories, setCategories] = useRecoilState(categoryState);
+
+  const configsMissing = useQuery(
+    ['startup-configs'],
+    async () => {
+      try {
+        const steamDir = await getInstallDirectory();
+        const steamContentDirectory = await getSteamContentDirectory();
+
+        console.log(steamDir);
+        console.log(steamContentDirectory);
+      } catch (e) {
+        console.log('error', e);
+        throw e;
+      }
+
+      return 'lol';
+    },
+    {
+      staleTime: Infinity,
+    }
+  );
 
   const categoryQuery = useQuery(['categories'], async () => {
     let cats = await retrieveCategories();
@@ -56,7 +84,6 @@ function App() {
       if (!modList) {
         throw new Error('Failed to load modlist');
       }
-
       modList = modList.sort((a, b) => (a.filename >= b.filename ? 1 : -1));
       modList.forEach((mod) => {
         const cats = Object.entries(categories);
@@ -95,8 +122,14 @@ function App() {
     setProfiles(profiles.data);
   }
 
+  if (modListQuery.isError) {
+    console.log(modListQuery.error);
+  }
   // todo - first time setup
   // Creating configuration files - ensure that Steam has started and Warhammer III is installed.
+  // if (configsMissing.data === true) {
+  //   return <div>some stuff is missing</div>;
+  // }
 
   return (
     <div className="full-bg bg-image h-screen flex flex-col flex-nowrap">

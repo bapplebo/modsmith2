@@ -5,11 +5,11 @@ import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 import { Mod } from '../models/Mod';
 import { ModMetadata } from '../models/ModMetadata';
-import { steamContentDirectory } from './pathUtils';
+import { getSteamContentDirectory } from './pathUtils';
 import { storeUserIdValue, retrieveUserIdValue } from './cache';
 
 export const retrieveModList = async (): Promise<Mod[]> => {
-  const workshopDirectory = await steamContentDirectory();
+  const workshopDirectory = await getSteamContentDirectory();
   if (!workshopDirectory.trim()) {
     console.error('Missing workshop directory, exiting');
     throw new Error('Missing workshop directory');
