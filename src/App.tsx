@@ -22,11 +22,24 @@ import { retrieveCategories } from './utils/categoryUtils';
 import { appWindow } from '@tauri-apps/api/window';
 import { Titlebar } from './components/titlebar/Titlebar';
 import { dir } from 'console';
+import { appWindow } from '@tauri-apps/api/window';
+import { clearSymlinks, clearUserScript } from './utils/launchGameUtils';
 
 function App() {
   const [_, setProfiles] = useRecoilState(profilesState);
   const [loadedMods, setLoadedMods] = useRecoilState(loadedModsState);
   const [categories, setCategories] = useRecoilState(categoryState);
+
+  useEffect(() => {
+    // Clear on startup, and on cleanup
+    clearUserScript();
+    clearSymlinks();
+
+    appWindow.onCloseRequested(async (event) => {
+      await clearUserScript();
+      await clearSymlinks();
+    });
+  }, []);
 
   const configsMissing = useQuery(
     ['startup-configs'],
