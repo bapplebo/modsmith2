@@ -20,6 +20,8 @@ use steamworks::PublishedFileId;
 use tauri::api::dialog::*;
 use tauri::Manager;
 
+const WH3_ID: u32 = 1142710;
+
 #[derive(serde::Serialize, Clone, Debug)]
 struct ModMetadata {
     id: String,
@@ -138,19 +140,6 @@ fn get_metadata_from_workshop_ids(
         .map(|id| PublishedFileId(id.parse::<u64>().unwrap()))
         .collect();
 
-    //println!("{:?}", items);
-
-    // 2793731221
-    // client
-    //     .ugc()
-    //     .query_item(PublishedFileId(2793731221))
-    //     .unwrap()
-    //     .fetch(|cb| {
-    //         if let Ok(cb) = cb {
-    //             println!("single result");
-    //         }
-    //     });
-
     let query = match client.ugc().query_items(items) {
         Ok(query) => query,
         Err(e) => panic!("Error creating query: {:?}", e),
@@ -172,7 +161,6 @@ fn get_metadata_from_workshop_ids(
                 Ok(results) => {
                     for item in results.iter() {
                         if let Some(item) = item {
-                            //println!("Pushing to vector");
                             m.push(ModMetadata {
                                 id: item.published_file_id.0.to_string(),
                                 description: item.description,
@@ -181,7 +169,7 @@ fn get_metadata_from_workshop_ids(
                                 url: format!(
                                     "https://steamcommunity.com/sharedfiles/filedetails/?id={}",
                                     item.published_file_id.0
-                                ), // this looks empty, parse it manually :(
+                                ), // this looks empty, we'll parse it manually later :(
 
                                 time_updated: item.time_updated,
                             });
@@ -197,9 +185,8 @@ fn get_metadata_from_workshop_ids(
             }
         });
 
-    // todo - pass the metadata itself through the message
+    // todo - pass the metadata itself through the message?
     rx.recv().unwrap();
-    //println!("{:?}", mod_metadata);
     let result = mod_metadata.lock().unwrap().clone();
     result
 }
@@ -236,11 +223,7 @@ fn find_mods(client: tauri::State<steamworks::Client<ClientManager>>) -> Vec<Str
 }
 
 fn main() {
-    // 1142710 - WH3 ID
-
-    // let (client, single) = Client::init_app(1142710).unwrap();
-
-    match Client::init_app(1142710) {
+    match Client::init_app(WH3_ID) {
         Ok((client, single)) => {
             let callback_thread = std::thread::spawn(move || loop {
                 single.run_callbacks();
