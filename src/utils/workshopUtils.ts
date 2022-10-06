@@ -1,12 +1,10 @@
 import { ModWithoutMetadata } from './../models/Mod';
 import { invoke } from '@tauri-apps/api';
-import { readDir } from '@tauri-apps/api/fs';
-import axios from 'axios';
+import { readDir, removeDir } from '@tauri-apps/api/fs';
 import { XMLParser } from 'fast-xml-parser';
 import { Mod } from '../models/Mod';
 import { ModMetadata } from '../models/ModMetadata';
 import { getSteamContentDirectory } from './pathUtils';
-import { storeUserIdValue, retrieveUserIdValue } from './cache';
 
 export const retrieveModList = async (): Promise<Mod[]> => {
   const workshopDirectory = await getSteamContentDirectory();
@@ -82,5 +80,17 @@ const fetchUsernameFromSteamID = async (fullSteamId?: string): Promise<string> =
   } catch (e) {
     console.error('Unable to determine ID for steam user: ', fullSteamId);
     return '[unknown]';
+  }
+};
+
+export const unsubscribeFromMod = async (modId: string) => {
+  try {
+    await invoke('unsubscribe_from_mod', { modId: modId });
+
+    // Then delete the folder
+    const workshopDirectory = await getSteamContentDirectory();
+    await removeDir(`${workshopDirectory}/${modId}`, { recursive: true });
+  } catch (e) {
+    console.error(e);
   }
 };

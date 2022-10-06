@@ -40,7 +40,7 @@ export const LoadProfiles = () => {
       >
         <div className="p-1 text-base">Load profile</div>
         <div className="mb-2 border-b border-neutral-600" />
-        <div className="bg-neutral-900 rounded mb-2 overflow-y-auto h-96">
+        <div className="bg-neutral-900 bg-opacity-40 rounded mb-2 overflow-y-auto h-96">
           <div
             className={`select-none p-2 cursor-pointer ${
               selectedProfile === 'Last used mods.json' ? 'bg-neutral-700' : ''

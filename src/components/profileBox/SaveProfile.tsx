@@ -44,7 +44,7 @@ export const SaveProfile = () => {
   return (
     <>
       <Dialog
-        className="p-3 w-96 shadow-lg bg-neutral-800 bg-opacity-30 border border-white/10  backdrop-blur"
+        className="rounded-md p-3 w-96 shadow-lg bg-neutral-800 bg-opacity-30 border border-white/10 backdrop-blur"
         isOpen={showModal}
         onDismiss={close}
       >

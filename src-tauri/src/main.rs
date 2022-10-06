@@ -45,9 +45,25 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
+fn unsubscribe_from_mod(client: tauri::State<steamworks::Client<ClientManager>>, mod_id: &str) {
+    println!("Unsubscribing from id: {}", mod_id);
+    let file_id = PublishedFileId(mod_id.parse::<u64>().unwrap());
+    client.ugc().unsubscribe_item(file_id, move |res| {
+        if let Ok(res) = res {
+            println!("{:?}", res);
+            println!("Unsubscribed from ID: {}", file_id.0)
+        } else {
+            println!("Unsubscribe failed for ID: {}", file_id.0)
+        }
+    });
+
+    println!("Timing")
+}
+
+#[tauri::command]
 fn get_install_dir(client: tauri::State<steamworks::Client<ClientManager>>) -> String {
     // > We need string, because Steam IDs are too big for js Number type
-    client.apps().app_install_dir(AppId(1142710)).to_string()
+    client.apps().app_install_dir(AppId(WH3_ID)).to_string()
 }
 
 #[tauri::command]
@@ -241,7 +257,8 @@ fn main() {
                     get_subscribed_items,
                     get_public_steam_user_data,
                     setup_symlinks,
-                    delete_symlinks
+                    delete_symlinks,
+                    unsubscribe_from_mod
                 ])
                 .setup(|app| {
                     let main_window = app.get_window("main").unwrap();

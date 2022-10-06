@@ -41,24 +41,24 @@ function App() {
     });
   }, []);
 
-  const configsMissing = useQuery(
-    ['startup-configs'],
-    async () => {
-      try {
-        const steamDir = await getInstallDirectory();
-        const steamContentDirectory = await getSteamContentDirectory();
+  // const configsMissing = useQuery(
+  //   ['startup-configs'],
+  //   async () => {
+  //     try {
+  //       const steamDir = await getInstallDirectory();
+  //       const steamContentDirectory = await getSteamContentDirectory();
 
-        console.log(steamDir);
-        console.log(steamContentDirectory);
-      } catch (e) {
-        console.log('error', e);
-        throw e;
-      }
-    },
-    {
-      staleTime: Infinity,
-    }
-  );
+  //       console.log(steamDir);
+  //       console.log(steamContentDirectory);
+  //     } catch (e) {
+  //       console.log('error', e);
+  //       throw e;
+  //     }
+  //   },
+  //   {
+  //     staleTime: Infinity,
+  //   }
+  // );
 
   const categoryQuery = useQuery(['categories'], async () => {
     let cats = await retrieveCategories();

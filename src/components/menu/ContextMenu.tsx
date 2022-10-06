@@ -6,6 +6,7 @@ import Dialog from '@reach/dialog';
 import { saveCategory } from '../../utils/categoryUtils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../generic/Button';
+import { unsubscribeFromMod } from '../../utils/workshopUtils';
 
 const itemClasses = 'rounded p-1 px-2 cursor-pointer hover:bg-neutral-700';
 
@@ -30,6 +31,17 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
 
   const close = () => setCategoryModalOpen(false);
 
+  const unsubscribe = async () => {
+    if (!modId?.trim()) {
+      return;
+    }
+
+    console.log('Unsubscribing...');
+    await unsubscribeFromMod(modId);
+    queryClient.invalidateQueries(['categories']);
+    queryClient.invalidateQueries(['modlist']);
+  };
+
   if (menu) {
     return (
       <ul
@@ -41,7 +53,11 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
             <li className={itemClasses} onClick={() => open(url)}>
               Open on Steam Workshop
             </li>
-            <li className={itemClasses} onClick={() => changeCategory()}>
+            <li className={itemClasses} onClick={unsubscribe}>
+              Unsubscribe
+            </li>
+            <hr />
+            <li className={itemClasses} onClick={changeCategory}>
               Change category
             </li>
           </>
