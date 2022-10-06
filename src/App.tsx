@@ -54,8 +54,6 @@ function App() {
         console.log('error', e);
         throw e;
       }
-
-      return 'lol';
     },
     {
       staleTime: Infinity,
