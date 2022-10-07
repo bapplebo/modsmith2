@@ -10,6 +10,7 @@ import { join } from '@tauri-apps/api/path';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../generic/Button';
 import { saveProfile } from '../../utils/profiles';
+import { toast } from 'react-toastify';
 
 export const SaveProfile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -32,6 +33,7 @@ export const SaveProfile = () => {
     await saveProfile(profileName, selectedMods);
 
     queryClient.invalidateQueries(['profiles']);
+    toast(`Saved profile: ${profileName}`);
     close();
   };
 

@@ -1,13 +1,5 @@
 import { useEffect } from 'react';
 import './App.css';
-import { exists, readTextFile } from '@tauri-apps/api/fs';
-import {
-  getConfigFilePath,
-  getInstallDirectory,
-  getModsmithConfigDir,
-  getProfilesDir,
-  getSteamContentDirectory,
-} from './utils/pathUtils';
 import { useRecoilState } from 'recoil';
 import { LaunchGameButton } from './components/LaunchGameButton';
 import { ModContent } from './components/ModContent';
@@ -24,6 +16,8 @@ import { Titlebar } from './components/titlebar/Titlebar';
 import { dir } from 'console';
 import { appWindow } from '@tauri-apps/api/window';
 import { clearSymlinks, clearUserScript } from './utils/launchGameUtils';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [_, setProfiles] = useRecoilState(profilesState);
@@ -187,6 +181,13 @@ function App() {
           )}
         </div>
       </div>
+      <ToastContainer
+        toastClassName="bg-neutral-800 bg-opacity-20 border border-black"
+        bodyClassName="bg-neutral-800 bg-opacity-30 border border-white/10"
+        position="bottom-right"
+        pauseOnHover={false}
+        autoClose={3000}
+      />
     </div>
   );
 }

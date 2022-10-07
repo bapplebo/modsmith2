@@ -6,6 +6,8 @@ import { readTextFile } from '@tauri-apps/api/fs';
 
 import '@reach/dialog/styles.css';
 import { Button } from '../generic/Button';
+import { profile } from 'console';
+import { toast } from 'react-toastify';
 export const LoadProfiles = () => {
   const [showModal, setShowModal] = useState(false);
   const [profiles, setProfiles] = useRecoilState(profilesState);
@@ -24,6 +26,7 @@ export const LoadProfiles = () => {
     const profileInfoRaw = await readTextFile(profileToLoad.path);
     const profileInfo = JSON.parse(profileInfoRaw);
     setSelectedProfileToLoad(profileInfo);
+    toast(`Loaded profile: ${profileInfo.Name}`);
     close();
   };
 
@@ -71,7 +74,7 @@ export const LoadProfiles = () => {
           </Button>
         </div>
       </Dialog>
-      <Button className="w-full" onClick={open}>
+      <Button className="w-full" variant="secondary" onClick={open}>
         Load profile
       </Button>
     </>
