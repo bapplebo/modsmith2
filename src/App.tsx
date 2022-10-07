@@ -113,7 +113,7 @@ function App() {
     },
     {
       staleTime: 60 * 1000, // 60 * 1000 ms = 60 seconds,
-      enabled: Object.keys(categories).length > 0,
+      enabled: !!categories,
     }
   );
 
@@ -135,6 +135,10 @@ function App() {
 
   if (modListQuery.isError) {
     console.log(modListQuery.error);
+  }
+
+  if (categoryQuery.isError) {
+    console.log(categoryQuery.error);
   }
   // todo - first time setup
   // Creating configuration files - ensure that Steam has started and Warhammer III is installed.

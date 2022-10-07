@@ -16,7 +16,9 @@ export const clearUserScript = async () => {
   const configDirPath = await configDir();
   const totalWarAppDataPath = await join(configDirPath, 'The Creative Assembly', 'Warhammer3');
   const totalWarScriptPath = await join(totalWarAppDataPath, 'scripts', 'user.script.txt');
-  await fs.removeFile(totalWarScriptPath).catch(console.error);
+  await fs.removeFile(totalWarScriptPath).catch((e) => {
+    console.error('Error clearing user script - this might be fine: ', e);
+  });
 };
 
 export const writeUserScript = async (selectedMods: Mod[]) => {
