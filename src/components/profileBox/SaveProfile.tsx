@@ -55,7 +55,7 @@ export const SaveProfile = () => {
           Enter a profile name to save. Using the same name will overwrite an existing profile.
         </div>
         <div className="mb-2 border-b border-neutral-600" />
-        <div className="bg-neutral-900 rounded mb-2 overflow-y-auto h-48">
+        <div className="bg-neutral-900 rounded mb-2 overflow-y-auto h-60">
           {profiles.map((profile, i) => {
             const profileName = profile.name?.split('.json')[0];
             if (profileName === 'Last used mods') {

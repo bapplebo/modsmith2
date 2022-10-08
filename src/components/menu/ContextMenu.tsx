@@ -48,7 +48,7 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
   if (menu) {
     return (
       <ul
-        className="p-1 rounded absolute bg-neutral-800 border border-neutral-900 text-sm shadow-lg space-y-1"
+        className="p-1 rounded fixed bg-neutral-800 border border-neutral-900 text-sm shadow-lg space-y-1"
         style={{ top: yPos, left: xPos }}
       >
         {url ? (
