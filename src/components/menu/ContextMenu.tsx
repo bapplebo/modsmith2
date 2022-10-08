@@ -6,6 +6,8 @@ import Dialog from '@reach/dialog';
 import { saveCategory } from '../../utils/categoryUtils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../generic/Button';
+import { unsubscribeFromMod } from '../../utils/workshopUtils';
+import { toast } from 'react-toastify';
 
 const itemClasses = 'rounded p-1 px-2 cursor-pointer hover:bg-neutral-700';
 
@@ -25,15 +27,28 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
     queryClient.invalidateQueries(['categories']);
     queryClient.invalidateQueries(['modlist']);
 
+    toast(`Added mod to category: ${_categoryName}`);
     close();
   };
 
   const close = () => setCategoryModalOpen(false);
 
+  const unsubscribe = async () => {
+    if (!modId?.trim()) {
+      return;
+    }
+
+    console.log('Unsubscribing...');
+    await unsubscribeFromMod(modId);
+    toast(`Unsubscribe successful`);
+    queryClient.invalidateQueries(['categories']);
+    queryClient.invalidateQueries(['modlist']);
+  };
+
   if (menu) {
     return (
       <ul
-        className="p-1 rounded absolute bg-neutral-800 border border-neutral-900 text-sm shadow-lg space-y-1"
+        className="p-1 rounded fixed bg-neutral-800 border border-neutral-900 text-sm shadow-lg space-y-1"
         style={{ top: yPos, left: xPos }}
       >
         {url ? (
@@ -41,7 +56,11 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
             <li className={itemClasses} onClick={() => open(url)}>
               Open on Steam Workshop
             </li>
-            <li className={itemClasses} onClick={() => changeCategory()}>
+            <li className={itemClasses} onClick={unsubscribe}>
+              Unsubscribe
+            </li>
+            <hr />
+            <li className={itemClasses} onClick={changeCategory}>
               Change category
             </li>
           </>

@@ -6,6 +6,7 @@ import { Mod } from '../models/Mod';
 import { selectedModsState } from '../state/selectedMods';
 import { setUpSymlinks, writeUserScript, clearSymlinks, clearUserScript } from '../utils/launchGameUtils';
 import { getInstallDirectory } from '../utils/pathUtils';
+import { saveProfile } from '../utils/profiles';
 import { Button } from './generic/Button';
 
 export const LaunchGameButton = () => {
@@ -19,8 +20,9 @@ export const LaunchGameButton = () => {
     await clearUserScript();
 
     if (selectedMods.length > 0) {
-      // todo - handle Last mods used 
-      
+      const profileName = 'Last used mods';
+      await saveProfile(profileName, selectedMods);
+
       await setUpSymlinks(selectedMods);
       console.log('Symlinks created');
       await writeUserScript(selectedMods);

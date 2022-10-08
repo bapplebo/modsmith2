@@ -1,5 +1,5 @@
 import { getModsmithConfigDir, getConfigFilePath, getProfilesDir } from './pathUtils';
-import { exists, createDir } from '@tauri-apps/api/fs';
+import { exists, createDir, writeTextFile } from '@tauri-apps/api/fs';
 
 export const bootstrap = async () => {
   const modsmithConfigDirExists: boolean = (await exists(await getModsmithConfigDir())) as unknown as boolean;
@@ -11,6 +11,7 @@ export const bootstrap = async () => {
   const profileJsonExists: boolean = (await exists(await getConfigFilePath())) as unknown as boolean;
   if (!profileJsonExists) {
     console.log('Creating config.json...');
+    await writeTextFile(await getConfigFilePath(), JSON.stringify('{}'));
   }
 
   const profilesDirectoryExists: boolean = (await exists(await getProfilesDir())) as unknown as boolean;

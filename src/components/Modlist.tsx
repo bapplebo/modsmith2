@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { steamContentDirectory } from '../utils/pathUtils';
+import { getSteamContentDirectory } from '../utils/pathUtils';
 import { readDir, BaseDirectory } from '@tauri-apps/api/fs';
 import { Mod } from '../models/Mod';
 import {

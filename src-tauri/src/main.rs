@@ -17,7 +17,10 @@ use steamworks::AppId;
 use steamworks::Client;
 use steamworks::ClientManager;
 use steamworks::PublishedFileId;
+use tauri::api::dialog::*;
 use tauri::Manager;
+
+const WH3_ID: u32 = 1142710;
 
 #[derive(serde::Serialize, Clone, Debug)]
 struct ModMetadata {
@@ -42,9 +45,25 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
+fn unsubscribe_from_mod(client: tauri::State<steamworks::Client<ClientManager>>, mod_id: &str) {
+    println!("Unsubscribing from id: {}", mod_id);
+    let file_id = PublishedFileId(mod_id.parse::<u64>().unwrap());
+    client.ugc().unsubscribe_item(file_id, move |res| {
+        if let Ok(res) = res {
+            println!("{:?}", res);
+            println!("Unsubscribed from ID: {}", file_id.0)
+        } else {
+            println!("Unsubscribe failed for ID: {}", file_id.0)
+        }
+    });
+
+    println!("Timing")
+}
+
+#[tauri::command]
 fn get_install_dir(client: tauri::State<steamworks::Client<ClientManager>>) -> String {
     // > We need string, because Steam IDs are too big for js Number type
-    client.apps().app_install_dir(AppId(1142710)).to_string()
+    client.apps().app_install_dir(AppId(WH3_ID)).to_string()
 }
 
 #[tauri::command]
@@ -137,19 +156,6 @@ fn get_metadata_from_workshop_ids(
         .map(|id| PublishedFileId(id.parse::<u64>().unwrap()))
         .collect();
 
-    //println!("{:?}", items);
-
-    // 2793731221
-    // client
-    //     .ugc()
-    //     .query_item(PublishedFileId(2793731221))
-    //     .unwrap()
-    //     .fetch(|cb| {
-    //         if let Ok(cb) = cb {
-    //             println!("single result");
-    //         }
-    //     });
-
     let query = match client.ugc().query_items(items) {
         Ok(query) => query,
         Err(e) => panic!("Error creating query: {:?}", e),
@@ -171,7 +177,6 @@ fn get_metadata_from_workshop_ids(
                 Ok(results) => {
                     for item in results.iter() {
                         if let Some(item) = item {
-                            //println!("Pushing to vector");
                             m.push(ModMetadata {
                                 id: item.published_file_id.0.to_string(),
                                 description: item.description,
@@ -180,7 +185,7 @@ fn get_metadata_from_workshop_ids(
                                 url: format!(
                                     "https://steamcommunity.com/sharedfiles/filedetails/?id={}",
                                     item.published_file_id.0
-                                ), // this looks empty, parse it manually :(
+                                ), // this looks empty, we'll parse it manually later :(
 
                                 time_updated: item.time_updated,
                             });
@@ -196,9 +201,8 @@ fn get_metadata_from_workshop_ids(
             }
         });
 
-    // todo - pass the metadata itself through the message
+    // todo - pass the metadata itself through the message?
     rx.recv().unwrap();
-    //println!("{:?}", mod_metadata);
     let result = mod_metadata.lock().unwrap().clone();
     result
 }
@@ -235,35 +239,61 @@ fn find_mods(client: tauri::State<steamworks::Client<ClientManager>>) -> Vec<Str
 }
 
 fn main() {
-    // 1142710 - WH3 ID
-    let (client, single) = Client::init_app(1142710).unwrap();
-    let callback_thread = std::thread::spawn(move || loop {
-        single.run_callbacks();
-        std::thread::sleep(std::time::Duration::from_millis(50));
-    });
+    match Client::init_app(WH3_ID) {
+        Ok((client, single)) => {
+            let callback_thread = std::thread::spawn(move || loop {
+                single.run_callbacks();
+                std::thread::sleep(std::time::Duration::from_millis(50));
+            });
 
-    tauri::Builder::default()
-        .manage(client)
-        .invoke_handler(tauri::generate_handler![
-            greet,
-            get_install_dir,
-            launch_game,
-            find_mods,
-            get_metadata_from_workshop_ids,
-            get_subscribed_items,
-            get_public_steam_user_data,
-            setup_symlinks,
-            delete_symlinks
-        ])
-        .setup(|app| {
-            let main_window = app.get_window("main").unwrap();
-            main_window.get_window("main").unwrap().show().unwrap();
-            Ok(())
-        })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+            tauri::Builder::default()
+                .manage(client)
+                .invoke_handler(tauri::generate_handler![
+                    greet,
+                    get_install_dir,
+                    launch_game,
+                    find_mods,
+                    get_metadata_from_workshop_ids,
+                    get_subscribed_items,
+                    get_public_steam_user_data,
+                    setup_symlinks,
+                    delete_symlinks,
+                    unsubscribe_from_mod
+                ])
+                .setup(|app| {
+                    let main_window = app.get_window("main").unwrap();
+                    main_window.get_window("main").unwrap().show().unwrap();
+                    Ok(())
+                })
+                .run(tauri::generate_context!())
+                .expect("error while running tauri application");
 
-    callback_thread
-        .join()
-        .expect("Failed to join callback thread");
+            callback_thread
+                .join()
+                .expect("Failed to join callback thread");
+        }
+        Err(e) => {
+            tauri::Builder::default()
+                .setup(move |app| {
+                    println!("{}", e.to_string());
+                    let main_window = app.get_window("main").unwrap();
+                    main_window.get_window("main").unwrap().show().unwrap();
+
+                    MessageDialogBuilder::new(
+                        "Error",
+                        "Please make sure Steam is running before launching.",
+                    )
+                    .kind(MessageDialogKind::Error)
+                    .buttons(MessageDialogButtons::Ok)
+                    .show(move |f| {
+                        main_window.close();
+                        println!("close")
+                    });
+
+                    Ok(())
+                })
+                .run(tauri::generate_context!())
+                .expect("error while running tauri application");
+        }
+    }
 }

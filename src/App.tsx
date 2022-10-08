@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
 import './App.css';
-import { readTextFile } from '@tauri-apps/api/fs';
-import { getInstallDirectory } from './utils/pathUtils';
 import { useRecoilState } from 'recoil';
 import { LaunchGameButton } from './components/LaunchGameButton';
 import { ModContent } from './components/ModContent';
@@ -13,13 +11,46 @@ import { retrieveModList } from './utils/workshopUtils';
 import { loadedModsState } from './state/loadedMods';
 import { categoryState } from './state/categoryState';
 import { retrieveCategories } from './utils/categoryUtils';
-import { appWindow } from '@tauri-apps/api/window';
 import { Titlebar } from './components/titlebar/Titlebar';
+import { appWindow } from '@tauri-apps/api/window';
+import { clearSymlinks, clearUserScript } from './utils/launchGameUtils';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [_, setProfiles] = useRecoilState(profilesState);
   const [loadedMods, setLoadedMods] = useRecoilState(loadedModsState);
   const [categories, setCategories] = useRecoilState(categoryState);
+
+  useEffect(() => {
+    // Clear on startup, and on cleanup
+    clearUserScript();
+    clearSymlinks();
+
+    appWindow.onCloseRequested(async (event) => {
+      await clearUserScript();
+      await clearSymlinks();
+    });
+  }, []);
+
+  // const configsMissing = useQuery(
+  //   ['startup-configs'],
+  //   async () => {
+  //     try {
+  //       const steamDir = await getInstallDirectory();
+  //       const steamContentDirectory = await getSteamContentDirectory();
+
+  //       console.log(steamDir);
+  //       console.log(steamContentDirectory);
+  //     } catch (e) {
+  //       console.log('error', e);
+  //       throw e;
+  //     }
+  //   },
+  //   {
+  //     staleTime: Infinity,
+  //   }
+  // );
 
   const categoryQuery = useQuery(['categories'], async () => {
     let cats = await retrieveCategories();
@@ -56,7 +87,6 @@ function App() {
       if (!modList) {
         throw new Error('Failed to load modlist');
       }
-
       modList = modList.sort((a, b) => (a.filename >= b.filename ? 1 : -1));
       modList.forEach((mod) => {
         const cats = Object.entries(categories);
@@ -75,7 +105,7 @@ function App() {
     },
     {
       staleTime: 60 * 1000, // 60 * 1000 ms = 60 seconds,
-      enabled: Object.keys(categories).length > 0,
+      enabled: !!categories,
     }
   );
 
@@ -95,8 +125,18 @@ function App() {
     setProfiles(profiles.data);
   }
 
+  if (modListQuery.isError) {
+    console.log(modListQuery.error);
+  }
+
+  if (categoryQuery.isError) {
+    console.log(categoryQuery.error);
+  }
   // todo - first time setup
   // Creating configuration files - ensure that Steam has started and Warhammer III is installed.
+  // if (configsMissing.data === true) {
+  //   return <div>some stuff is missing</div>;
+  // }
 
   return (
     <div className="full-bg bg-image h-screen flex flex-col flex-nowrap">
@@ -139,6 +179,13 @@ function App() {
           )}
         </div>
       </div>
+      <ToastContainer
+        toastClassName="bg-neutral-800 bg-opacity-20 border border-black"
+        bodyClassName="bg-neutral-800 bg-opacity-30 border border-white/10"
+        position="bottom-right"
+        pauseOnHover={false}
+        autoClose={3000}
+      />
     </div>
   );
 }
