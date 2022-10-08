@@ -7,6 +7,7 @@ import { saveCategory } from '../../utils/categoryUtils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../generic/Button';
 import { unsubscribeFromMod } from '../../utils/workshopUtils';
+import { toast } from 'react-toastify';
 
 const itemClasses = 'rounded p-1 px-2 cursor-pointer hover:bg-neutral-700';
 
@@ -26,6 +27,7 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
     queryClient.invalidateQueries(['categories']);
     queryClient.invalidateQueries(['modlist']);
 
+    toast(`Added mod to category: ${_categoryName}`);
     close();
   };
 
@@ -38,6 +40,7 @@ const TableContextMenu = ({ outerRef }: { outerRef: React.MutableRefObject<HTMLE
 
     console.log('Unsubscribing...');
     await unsubscribeFromMod(modId);
+    toast(`Unsubscribe successful`);
     queryClient.invalidateQueries(['categories']);
     queryClient.invalidateQueries(['modlist']);
   };
